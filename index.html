@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Аренда автомобилей</title>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Аренда автомобилей Севастополь</h1>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="gallery">
+                <div class="car" onclick="openModal('car1')">
+                    <img src="cars1.png" alt="Автомобиль 1" width="200px">
+                    <h2>Cherry tyga 7 pro max</h2>
+                    <p>Краткое описание автомобиля 1.</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    
+    <footer>
+        <section class="contact">
+            <h2>Контактная информация</h2>
+            <p>Электронная почта: example@example.com</p>
+            <p>Телефон: +7 (123) 456-78-90</p>
+            <p>Телефон: +7 (098) 765-43-21</p>
+        </section>
+    </footer>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2>Забронировать автомобиль</h2>
+            <div class="carBookForm" id="booking-form" >
+                <div>
+                    <label for="name">Ваше имя:</label>
+                    <input type="text" id="name" required>
+                </div>
+                <div>
+                    <label for="email">Ваша почта (необязательно):</label>
+                    <input type="email" id="email">
+                </div>
+                <div>
+                    <label for="call-select">Как лучше с вами связаться</label>
+                    <select name="call" id="call-select">
+                        <option value="whats">Вацап</option>
+                        <option value="tg">Телеграм</option>
+                        <option value="call">Звонок</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="date">Дата начала аренды аренды:</label>
+                    <input type="date" id="date" required>
+                </div>
+                <div>
+                    <label for="date">Дата начала аренды аренды:</label>
+                    <input type="number" id="forTime" name="tentacles" min="1" max="90" />
+                </div>
+                <div class="comm">
+                    <label for="Комментарий">Комментарий</label>
+                    <textarea type="text" id="Комментарий" rows="2" ></textarea>
+                </div>
+
+                <button onclick="myFunctionName()">Забронировать</button>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script>
+        function openModal() {
+            document.getElementById("modal").style.display = "block";
+        }
+        function closeModal() {
+            document.getElementById("modal").style.display = "none";
+        }
+        async function myFunctionName(){
+            let name = document.getElementById('name');
+            let email = document.getElementById('email');
+            let device = document.getElementById('call-select');
+            let date = document.getElementById('date');
+            let forTime = document.getElementById('forTime');
+            let comm = document.getElementById('Комментарий');
+            let data = [name, email, device, date, forTime]
+            let flag = false
+            for (const element of data) {
+                if(element.value == ''){
+                    element.classList.add('error')
+                    flag = true
+                }
+            }
+
+            if (flag){
+                alert('Не все поля заполнены')
+                return
+            }
+            console.log(name)
+            console.log(email)
+            console.log(device)
+            console.log(date)
+            console.log(forTime)
+            console.log(comm)
+
+            const url = "http://127.0.0.1:3027/hello";
+            try {
+            const response = await fetch(url, {
+                mode: "cors",
+                headers: {
+                "Access-Control-Allow-Origin": "*",
+                "Content-Type": "application/json",
+                },
+                method: "POST",
+                body: JSON.stringify({
+                name: name,
+                email: email,
+                device: device,
+                date: date,
+                forTime: forTime,
+                comm: comm,
+                }),
+            });
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const json = await response.json();
+            console.log(json);
+            } catch (error) {
+            console.error(error.message);
+            }
+        }
+    </script>
+</body>
+</html>
